@@ -1,0 +1,4 @@
+用openresty搭建的一个简易web框架，包含model、controller结构
+
+model中可以直接使用self.db获取数据库连接
+controller中可以只用self.request、self.response、self.redis分别获得请求、响应、redis对象
