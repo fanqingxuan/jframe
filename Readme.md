@@ -201,7 +201,7 @@
       name = "test",
       pwd = 123
   }
-  userModel:create(data)
+  local insertId = userModel:create(data)
   ```
 
 - É¾³ý
