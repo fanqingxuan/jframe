@@ -4,7 +4,7 @@ local setmetatable = setmetatable
 local tinsert = table.insert
 local tconcat = table.concat
 local utils = require("libs.utils")
-
+local ngx = ngx
 local Response = {}
 
 function Response:new()

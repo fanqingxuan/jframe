@@ -7,6 +7,10 @@ function Home:index()
     self:json({data={}})
 end
 
+function Home:show() 
+    self:json({data={controller=self.controller,action=self.action,get=self.request.query}})
+end
+
 function Home:list()
     self.redis:set("test","测试")
     self:json({data=self.redis:get("test")})

@@ -6,6 +6,7 @@ local pairs = pairs
 local mysql = require("resty.mysql")
 local cjson = require("cjson")
 local DB = {}
+local ngx = ngx
 local mysql_config = {
     timeout = 5000,
     connect_config = {
