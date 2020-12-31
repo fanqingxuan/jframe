@@ -1,11 +1,11 @@
 local mysql_config = {
     timeout = 5000,
     connect_config = {
-        host = "127.0.0.1",
+        host = "192.168.40.24",
         port = 3306,
-        database = "demo",
+        database = "lty_trj0508",
         user = "root",
-        password = "root",
+        password = "a12345",
         max_packet_size = 1024 * 1024
     },
     pool_config = {
