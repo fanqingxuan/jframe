@@ -40,9 +40,12 @@ function Application:check()
 	local prefix = "controller."       
 	local path = prefix .. self.controller
 
+	if self.controller == 'base' then
+		ngx.log(ngx.ERR,"base already as internal module, and can't as controller name")
+		ngx.exit(500)
+	end
 	-- 尝试引入模块，不存在则报错
 	local ok, ctrl, err = pcall(require, path)
-	
 	if ok == false then
 		ngx.log(ngx.ERR,'require file error:'..ctrl)
 		ngx.exit(500)

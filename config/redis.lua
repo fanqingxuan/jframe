@@ -4,6 +4,6 @@ return {
     max_idle_timeout = 60000, -- max idle time
     pool_size = 1000, -- pool size
     timeout = 1000, -- timeout time
-    db_index= 5, -- database index
+    db_index= 2, -- database index
     
 }

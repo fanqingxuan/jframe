@@ -3,6 +3,7 @@ local Request = require "libs.request"
 local Response = require "libs.response"
 local redisConfig = require("config.redis")
 local Redis = require "libs.redis"
+
 local redis = Redis:new(redisConfig)
 local ngx = ngx
 local Base = Object:extend()

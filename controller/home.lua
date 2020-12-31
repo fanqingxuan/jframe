@@ -7,6 +7,26 @@ function Home:index()
     self:json({data={}})
 end
 
+function Home:cacheGet()
+	self.redis:set("hello","this 是我们")
+	self:json({data=self.redis:get('hello')})
+end
+
+function Home:cacheMget()
+	self.redis:mset("hello11","this 是我们","dd","哈哈哈")
+	self:json({data=self.redis:mget('hello11')})
+end
+
+function Home:cacheHget()
+	self.redis:hmset("H","A","AAAAA","B","BBBBB")
+	self:json({data=self.redis:hgetall('H')})
+end
+
+function Home:cachelist()
+	self.redis:lpush("list","A","AAAAA","B","BBBBB")
+	self:json({data=self.redis:lrange('list',0,-1)},"获取成功")
+end
+
 function Home:show() 
     self:json({data={controller=self.controller,action=self.action,get=self.request.query}})
 end

@@ -179,7 +179,6 @@ function Base:count()
 end
 
 function Base:columns(column)
-	ngx.say(type(column))
 	if type(column) == 'string' then
 		self.fields = column
 	elseif type(column) == 'table' then
