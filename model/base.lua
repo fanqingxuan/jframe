@@ -65,23 +65,23 @@ function Base:delete(id)
 		ngx.log(ngx.ERR,'delete function need prefix sql')
 		ngx.exit(500)
 	else
-		return self:query('delete from '..self.table..' where '..self.pk..'=' .. id).affected_rows
+		return self:query('delete from '..self.table..' where '..self.pk..'=' .. transform_value(id)).affected_rows
 	end
 	return false
 end
 
-function Base:soft_delete()
+function Base:soft_delete(id)
 	id = id or nil
 	if not id then
 		-- 拼接需要delete的字段
 		if self.query_sql then
-			local sql = 'update '..self.table..' set '..self.soft_delete_column..' = now() '.. self.query_sql
+			local sql = 'update '..self.table..' set '..self.soft_delete_column..' = now() '.. self.query_sql..' AND '..self.soft_delete_column..' IS NULL'
 			return self:query(sql).affected_rows
 		end
 		ngx.log(ngx.ERR,'delete function need prefix sql')
 		ngx.exit(500)
 	else
-		return self:query('update '..self.table..' set '..self.soft_delete_column..' = now()'..' where '..self.pk..'=' .. id).affected_rows
+		return self:query('update '..self.table..' set '..self.soft_delete_column..' = now()'..' where '..self.soft_delete_column..' IS NULL AND '..self.pk..'=' .. transform_value(id)).affected_rows
 	end
 	return false
 	
@@ -108,17 +108,16 @@ function Base:update(data,id)
 		ngx.log(ngx.ERR,'update function cannot called without restriction')
 		ngx.exit(500)
 	else
-		local sql = 'update '..self.table..' set '..str..' where '..self.pk..'='..id
+		local sql = 'update '..self.table..' set '..str..' where '..self.pk..'='..transform_value(id)
 		return self:query(sql).affected_rows
 	end
 	return false
 end
 
 function Base:get(id)
-	id = tonumber(id)
 	local where = self.query_sql;
 	if id then 
-		where = ' where '..self.pk..'='..id;
+		where = ' where '..self.pk..'='..transform_value(id);
 	else 
 		
 	end

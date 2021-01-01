@@ -7,6 +7,10 @@ function Home:index()
     self:json({data={}})
 end
 
+function Home:test() 
+	self.response:redirect("http://www.baidu.com")
+end
+
 function Home:cacheGet()
 	self.redis:set("hello","this 是我们")
 	self:json({data=self.redis:get('hello')})

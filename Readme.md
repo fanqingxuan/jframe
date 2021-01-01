@@ -139,8 +139,14 @@
   
       lua_package_path 'E:/openresty/demo/src/?.lua;;';
       server {
-          charset utf-8;
+          charset utf-8;        
           listen 8080;
+          
+          location = /favicon.ico {
+            log_not_found off;#关闭日志
+            access_log off;#不记录在access.log
+          }
+  
           location / {
               default_type text/html;
               content_by_lua_file "E:/openresty/demo/src/main.lua";
