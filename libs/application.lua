@@ -1,6 +1,7 @@
 local Object = require "libs.classic"
 local ngx = ngx
 local appConfig = require("config.app")
+local pcall = pcall
 
 local Application = Object:extend()
 local tmptable = {}

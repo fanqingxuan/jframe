@@ -131,8 +131,8 @@ function Base:get(id)
 end
 
 function Base:all()
-	local where = self.query_sql;
-	local sql = 'select '..self.fields..' from '..self.table..self.query_sql
+	local where = self.query_sql or '';
+	local sql = 'select '..self.fields..' from '..self.table..where
 	local res = self:query(sql)
 	return res
 end

@@ -1,0 +1,175 @@
+#!/usr/bin/env luajit
+local version = require("libs.version")
+
+-- 使用说明
+local usages = [[jframe v]] .. version .. [[, a Lua web framework based on OpenResty.
+Usage: jframe COMMAND [OPTIONS]
+Commands:
+ controller [name]          Create a new controller
+ model      [name]  [table] Create a new model
+ version                    Show version of the framework
+ help                       Show help tips
+]]
+
+-- 控制器模板
+local controller_tpl = [[
+-- Copyright (C) fanqingxuan (Json)
+-- https://github.com/fanqingxuan
+
+local Base = require("controller.base")
+
+local {{controllerName}} = Base:extend()
+
+-- 获取列表
+function {{controllerName}}:index()
+    self:json({
+        data = {
+            {
+                id      =   1,
+                title   =   'this is title'
+            },
+            {
+                id      =   2,
+                title   =   '这是标题'
+            },
+        }
+    },'成功')
+end
+
+-- 新增
+function {{controllerName}}:create()
+    self:json({
+        data = {}
+    },'创建成功')
+end
+
+-- 删除
+function {{controllerName}}:delete()
+    local id = self.request.query.id or 0 --获取主键
+    self:json({
+        data = {}
+    },'删除成功')
+end
+
+-- 修改
+function {{controllerName}}:update()
+    local id = self.request.query.id or 0 --获取主键
+    self:json({
+        data = {}
+    },'修改成功')
+end
+
+-- 查询
+function {{controllerName}}:show()
+    local id = self.request.query.id or 0 --获取主键
+    self:json({
+        data = {
+            id      = id,
+            title   = 'this is test title',
+            content = '这是测试内容'
+        }
+    },'成功')
+end
+
+return {{controllerName}}
+]]
+
+-- model模板
+local model_tpl = [[
+-- Copyright (C) fanqingxuan (Json)
+-- https://github.com/fanqingxuan
+
+local Base = require "model.base"
+
+local {{modelName}} = Base:extend()
+
+function {{modelName}}:getList(name,pwd)
+    return self:query("select * from sls_p_user where rname=? and pwd=?",{name,pwd})
+end
+return {{modelName}}("{{tableName}}")
+]]
+
+-- 获取处理后的内容
+local function get_content(tpl,pattern,replacement,Camelcase) 
+    --首字符大小，其它字母消息
+    if Camelcase then 
+        replacement = string.lower(replacement)
+        replacement = string.upper(string.sub(replacement,1,1)) .. string.sub(replacement,2)
+    end
+
+    local content,count = string.gsub(tpl,pattern,replacement)
+    return content,count
+end
+
+local function dirname(str)
+    if str:match(".-/.-") then
+        local name = string.gsub(str, "(.*/)(.*)", "%1")
+        return string.sub( name, 1,-2 )
+    else
+        return ''
+    end
+end
+
+-- 创建文件
+local function create_files(parent,file_path,file_content)
+    local full_file_path = parent .. '/' .. file_path..'.lua'
+    local full_file_dirname = dirname(full_file_path)
+    
+    local fw = io.open(full_file_path, 'w')
+    fw:write(file_content)
+    fw:close()
+    print('  created file ' .. full_file_path)
+end
+
+-- 生成controller
+local function generator_controller(controller)
+    
+    local content,count = get_content(controller_tpl,"{{controllerName}}",controller,true)
+    if count<=0 then
+        print("generate controller failed,please check the controller name")
+        os.exit()
+    end
+    create_files('controller',controller,content)
+    print('  created controller ' .. controller .. ' success')
+end
+
+-- 生成model
+local function generator_model(model,table)
+    
+    local content,count = get_content(model_tpl,"{{modelName}}",model,true)
+    if count<=0 then
+        print("generate model failed,please check the model name")
+        os.exit()
+    end
+    local tableName = table or model:lower()
+    local content,count = get_content(content,"{{tableName}}",tableName)
+    
+    if count<=0 then
+        print("generate model failed,please check the table name")
+        os.exit()
+    end
+    create_files('model',model,content)
+    print('  created model ' .. model .. ' success')
+end
+
+-- 执行命令
+local function exec(args)
+    local arg = table.remove(args, 1)
+
+    -- parse commands and options
+    if arg == 'controller' and args[1] then
+        generator_controller(args[1]:lower()) -- create controller
+    elseif arg == 'model' and args[1] then
+        generator_model(args[1]:lower(),args[2] or nil) -- create model
+    elseif arg == 'help' or arg == '-h' then
+        print(usages)
+    elseif arg == 'version' or arg == '-v' then
+        print(version) -- show framework version
+    elseif arg == nil then
+        print(usages)
+    else
+        print("[jframe] unsupported commands or options, `jframe -h` to check usages.")
+    end
+end
+
+exec(arg)
