@@ -48,7 +48,12 @@ function Application:check()
 	local ok, ctrl, err = pcall(require, path)
 	if ok == false then
 		ngx.log(ngx.ERR,'require file error:'..ctrl)
-		ngx.exit(500)
+		local m,err = ngx.re.match(ctrl,"'controller."..self.controller.."' not found")
+		if m then 
+			ngx.exit(404) --文件不存在
+		else
+			ngx.exit(500)
+		end
 		
 	end
 	
