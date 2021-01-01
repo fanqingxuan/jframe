@@ -115,7 +115,11 @@ local function create_files(parent,file_path,file_content)
     local full_file_path = parent .. '/' .. file_path..'.lua'
     local full_file_dirname = dirname(full_file_path)
     
-    local fw = io.open(full_file_path, 'w')
+    local fw,err = io.open(full_file_path, 'w')
+    if err then 
+        print("open file error,please confirm the directory permission ")
+        os.exit()
+    end
     fw:write(file_content)
     fw:close()
     print('  created file ' .. full_file_path)
