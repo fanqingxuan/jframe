@@ -121,9 +121,18 @@ local function create_files(parent,file_path,file_content)
     print('  created file ' .. full_file_path)
 end
 
+-- 检测是否都是字母
+local function checkstring(str)
+    return string.match(str,'^%a+$')
+end
+
 -- 生成controller
 local function generator_controller(controller)
     
+    if not checkstring(controller) then
+        print("generate controller failed,controller name all must be characters")
+        os.exit()
+    end
     local content,count = get_content(controller_tpl,"{{controllerName}}",controller,true)
     if count<=0 then
         print("generate controller failed,please check the controller name")
@@ -135,6 +144,11 @@ end
 
 -- 生成model
 local function generator_model(model,table)
+
+    if not checkstring(model) then
+        print("generate model failed,model name all must be characters")
+        os.exit()
+    end
     
     local content,count = get_content(model_tpl,"{{modelName}}",model,true)
     if count<=0 then
