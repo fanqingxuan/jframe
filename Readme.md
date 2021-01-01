@@ -305,5 +305,40 @@
     local result = userModel:query(sql,{1,"json"})
     ```
 
-    
 
+### 命令行
+
+为了方便快速生成控制器controller,以及模型model, 特开发了命令行,命令行使用**luajit**编写，需要将luajit放入环境变量
+
+```lua
+ ./jframe -h
+jframe v0.1.1, a Lua web framework based on OpenResty.
+Usage: jframe COMMAND [OPTIONS]
+Commands:
+ controller [name]          Create a new controller
+ model      [name]  [table] Create a new model
+ version                    Show version of the framework
+ help                       Show help tips
+```
+
+**注意windows下命令是**
+
+```lua
+luajit ./jframe -h
+```
+
+- 生成控制器，自动生成到controller目录下
+
+  ```lua
+  jframe controller controllerName
+  ```
+
+- 生成model，自动生成到model目录下
+
+  ```lua
+  jframe model modelName --不指定表名称，生成的model表名称默认是给定的modelname的小写格式
+  jframe model modelName table--指定model名称以及表名称
+  
+  ```
+
+  
