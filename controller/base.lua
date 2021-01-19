@@ -1,10 +1,19 @@
 local Object = require "libs.classic"
 local Request = require "libs.request"
 local Response = require "libs.response"
+
 local redisConfig = require("config.redis")
 local Redis = require "libs.redis"
 
+local memcachedConfig = require("config.memcached")
+local Memcached = require "libs.memcached"
+
+local LocalStorage = require "libs.localStorage"
+
 local redis = Redis:new(redisConfig)
+local memcached = Memcached:new(memcachedConfig)
+local localStorage = LocalStorage()
+
 local ngx = ngx
 local Base = Object:extend()
 
@@ -14,6 +23,8 @@ function Base:new(controller, action)
   self.request =  Request:new()
   self.response = Response:new()
   self.redis = redis
+  self.memcached = memcached
+  self.localStorage = localStorage
   self.ngx = ngx
   return self
 end

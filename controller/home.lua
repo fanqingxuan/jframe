@@ -3,8 +3,10 @@ local good = require "model.good"
 
 local Home = Base:extend()
 
-function Home:index() 
-    self:json({data={}})
+function Home:index()
+    -- local ok = cache:rpush("ll",2)
+    local value,cas = self.memcached:set("aaa",43)
+    self:json({data={set=ok,get=value,cas=cas,hello='hello'}})
 end
 
 function Home:test() 

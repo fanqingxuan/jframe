@@ -129,15 +129,15 @@
 
 - nginx.conf添加类似如下代码
 
-  ```she
+  ```shell
   worker_processes  1;
   error_log logs/error.log;
   events {
       worker_connections 1024;
   }
   http {
-  
-      lua_package_path 'E:/openresty/demo/src/?.lua;;';
+      lua_package_path 'E:/openresty/jframe/?.lua;;';
+      lua_shared_dict localStorage 100m;
       server {
           charset utf-8;        
           listen 8080;
@@ -149,7 +149,7 @@
   
           location / {
               default_type text/html;
-              content_by_lua_file "E:/openresty/demo/src/main.lua";
+              content_by_lua_file "E:/openresty/jframe/main.lua";
           }
       }
   }

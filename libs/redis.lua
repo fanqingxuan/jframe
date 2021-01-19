@@ -253,7 +253,7 @@ function _M.new(self, opts)
     local port = opts.port or 6379
     local max_idle_timeout = opts.max_idle_timeout or 60000
     local pool_size = opts.pool_size or 1000
-    local timeout = (opts.timeout and opts.timeout * 1000) or 1000
+    local timeout = opts.timeout or 1000
     local db_index= opts.db_index or 0
 
     return setmetatable({
